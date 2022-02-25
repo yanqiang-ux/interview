@@ -48,19 +48,36 @@ public:
         }
         std::cout << "\n" << std::endl;
       }
+      // for (int h = 2; h <= k; h++) {
+      //   for (int m = 2; m <= n; m ++) {
+      //     //start from t floor
+      //     int local_min = 0;
+      //     for (int t = 1; t <= m; t++) {
+      //       int max = dp_map[h-1][t-1] > dp_map[h][m-t] ? dp_map[h-1][t-1] + 1 : dp_map[h][m-t] + 1;
+      //       if (!local_min)
+      //         local_min = max;
+      //       if (local_min > max) {
+      //         local_min = max;
+      //       }
+      //     }
+      //     dp_map[h][m] = local_min;
+      //   }
+      // }
+      // optimize logn * k * n
       for (int h = 2; h <= k; h++) {
         for (int m = 2; m <= n; m ++) {
-          //start from t floor
-          int local_min = 0;
-          for (int t = 1; t <= m; t++) {
-            int max = dp_map[h-1][t-1] > dp_map[h][m-t] ? dp_map[h-1][t-1] + 1 : dp_map[h][m-t] + 1;
-            if (!local_min)
-              local_min = max;
-            if (local_min > max) {
-              local_min = max;
+          int start = 1;
+          int end = m;
+          int mid = 0;
+          while (start < end) {
+            mid = start + (end - start + 1) / 2;
+            if (dp_map[h-1][mid-1] > dp_map[h][m-mid]) {
+              end = mid -1;
+            } else {
+              start = mid;
             }
           }
-          dp_map[h][m] = local_min;
+          dp_map[h][m] = dp_map[h-1][start-1] > dp_map[h][m-start] ? dp_map[h-1][start-1] +1 : dp_map[h][m-start] + 1;
         }
       }
       return dp_map[k][n];
